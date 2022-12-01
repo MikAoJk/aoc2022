@@ -25,5 +25,5 @@ To build locally and run the integration tests you can simply run
 This project is maintained by [CODEOWNERS](CODEOWNERS)
 
 Questions please create an
-[issue](https://github.com/MikAoJk/docker-kotlin-gradle-ktor-postgres/issues).
+[issue](https://github.com/MikAoJk/aoc2022/issues).
 
