@@ -26,4 +26,3 @@ This project is maintained by [CODEOWNERS](CODEOWNERS)
 
 Questions please create an
 [issue](https://github.com/MikAoJk/aoc2022/issues).
-

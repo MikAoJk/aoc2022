@@ -1,28 +1,15 @@
-package io.github.mikaojk.day1
-
+package io.github.mikaojk.common
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 
-fun day1(): Int {
-
-    val itemsAsString = getFileAsString("src/main/resources/day1/items.txt")
-
-    val elves = itemsAsString.split("\\n\\n".toRegex())
-        .map { it.split("\\n".toRegex()) }.map {
-            Elves(items = toItems(it))
-        }
-
-    val elveWithBiggestTotalCalories = elveWithBiggestTotalCalories(elves)
-
-
-    return totalCaloriesInItems(elveWithBiggestTotalCalories.items)
+fun elfWithBiggestTotalCalories(elves: List<Elves>): Elves {
+    return elves.maxBy { totalCaloriesInItems(it.items) }
 }
 
-
-fun elveWithBiggestTotalCalories(elves: List<Elves>): Elves {
-    return elves.maxBy { totalCaloriesInItems(it.items) }
+fun elvesSortedByTotalCalories(elves: List<Elves>): List<Elves> {
+    return elves.sortedByDescending { totalCaloriesInItems(it.items) }
 }
 
 fun toItems(items: List<String>): List<Items> {
