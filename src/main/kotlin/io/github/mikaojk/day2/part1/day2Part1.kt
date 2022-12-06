@@ -19,7 +19,6 @@ fun day2Part1(): Int {
 
     rounds.forEach { round ->
         calculateScore(round.opponent, round.opponentHand, round.you, round.yourHand)
-        println(round)
     }
 
 
