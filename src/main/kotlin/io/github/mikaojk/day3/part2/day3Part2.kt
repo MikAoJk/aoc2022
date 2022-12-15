@@ -6,25 +6,21 @@ import java.util.Locale
 fun day3Part2(): Int {
 
     val rucksacksItems = getFileAsString("src/main/resources/day3/rucksacksItems.txt")
-    val rucksacks = rucksacksItems.split("\\n".toRegex()).map {
+    val rucksacks = rucksacksItems.split("\\n".toRegex()).mapIndexed { index, rucksacksItems ->
         Rucksack(
-            firstCompartment = Items(items = it.slice(0 until (it.length / 2))),
-            secoundCompartment = Items(items = it.slice((it.length / 2) until (it.length)))
+            number = index,
+            firstCompartment = Items(items = rucksacksItems.slice(0 until (rucksacksItems.length / 2))),
+            secoundCompartment = Items(items = rucksacksItems.slice((rucksacksItems.length / 2) until (rucksacksItems.length)))
         )
     }
 
-    val rucksacksGroups = rucksacks.mapIndexed { index, rucksack ->
+    val groupedRucksacks = rucksacks.chunked(3)
 
+    val sameItemsInGroup = groupedRucksacks.map {
+        findSameItem(it)
     }
 
-    println("rucksacksGroups: ${rucksacksGroups[0]}")
-
-
-    val sameItems = rucksacks.map { rucksack ->
-        findSameItem(rucksack.firstCompartment, rucksack.secoundCompartment)
-    }
-
-    val sumForEachRucksack = sameItems.flatMap { charList ->
+    val sumForEachRucksack = sameItemsInGroup.flatMap { charList ->
         charList.map { char ->
             findPriorityValueForItem(char)
         }
@@ -34,13 +30,6 @@ fun day3Part2(): Int {
     return sumForEachRucksack.sum()
 }
 
-data class ElveGroup(
-    val elves: List<Elve>
-)
-
-data class Elve(
-    val rucksack: Rucksack
-)
 
 fun findPriorityValueForItem(item: Char): Int {
     return if (item.isUpperCase()) {
@@ -50,9 +39,19 @@ fun findPriorityValueForItem(item: Char): Int {
     }
 }
 
-fun findSameItem(items1: Items, items2: Items): List<Char> {
-    val items1CharArray = items1.items.toCharArray()
-    val distinctSameItem = items1CharArray.filter { item -> items2.items.contains(item) }.toSet().toList();
+fun findSameItem(rucksacks: List<Rucksack>): List<Char> {
+
+    val rucksacksItem = rucksacks.map { rucksack ->
+        rucksack.firstCompartment.items + rucksack.secoundCompartment.items
+    }
+
+    return findSameItem(rucksacksItem[0], rucksacksItem[1], rucksacksItem[2])
+}
+
+fun findSameItem(items1: String, items2: String, items3: String): List<Char> {
+    val items1CharArray = items1.toCharArray()
+    val distinctSameItem =
+        items1CharArray.filter { item -> (items2.contains(item) && items3.contains(item)) }.toSet().toList();
 
     return distinctSameItem
 }
@@ -87,6 +86,7 @@ enum class PriorityUpperCase(val value: Int) {
 }
 
 data class Rucksack(
+    val number: Int,
     val firstCompartment: Items,
     val secoundCompartment: Items
 )
